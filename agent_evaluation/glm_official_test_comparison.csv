@@ -1,0 +1,5 @@
+Evaluation Scope,Model,n,accuracy,malware_recall,malware_precision,malware_f1,benign_fpr,roc_auc,partial_auc_max_fpr_0_1,tp,fp,tn,fn
+"Official Test Set (Full Matched N=21,655)",Random Forest (Original Baseline),21655,0.924775,0.924729,0.97852,0.950864,0.075054,0.97247,0.932888,15762,346,4264,1283
+"Official Test Set (Full Matched N=21,655)",GLM-5.3-Flash (Zero-Shot LLM),21655,0.440037,0.296685,0.973436,0.454766,0.029935,0.811433,0.651842,5057,138,4472,11988
+"Official Test Set (2024 Matched N=6,677)",Random Forest (Original Baseline),6677,0.9031,0.853965,0.83657,0.845178,0.074854,0.93574,0.872104,1766,345,4264,302
+"Official Test Set (2024 Matched N=6,677)",GLM-5.3-Flash (Zero-Shot LLM),6677,0.686236,0.053675,0.445783,0.095814,0.029941,0.755302,0.516733,111,138,4471,1957
