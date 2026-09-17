@@ -1,0 +1,6 @@
+Evaluation Scope,Model,n,accuracy,malware_recall,malware_precision,malware_f1,benign_fpr,roc_auc,partial_auc_max_fpr_0_1,tn,fp,fn,tp
+Official Wintap Test Set (Full),Original Random Forest Baseline,24747,0.925122,0.925736,0.978055,0.951176,0.077158,0.972505,0.931509,4844,405,1448,18050
+Official Wintap Test Set (2024 Cohort),Original Random Forest Baseline,7615,0.901904,0.855091,0.833608,0.844213,0.076982,0.936686,0.869083,4844,404,343,2024
+Official Wintap Test Set (2024 Cohort),Zero-Shot LLM Agent (Qwen 3.8B),7613,0.710495,0.239544,0.583934,0.339724,0.077011,0.70261,0.550757,4842,404,1800,567
+Official Test Set (Matched Cohort),Original Random Forest Baseline,2910,0.909622,0.854486,0.8573,0.85589,0.06513,0.939395,0.883226,1866,130,133,781
+Official Test Set (Matched Cohort),Retrieval-Assisted LLM Agent (Qwen 3.8B),2910,0.845704,0.818381,0.725509,0.769152,0.141784,0.893401,0.747284,1713,283,166,748

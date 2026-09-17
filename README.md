@@ -78,6 +78,26 @@ The full clean Random Forest baseline on all 14,619 year-2024 samples:
 
 ---
 
+### D. Direct Comparison on the Official Wintap Test Split (`truth_labels_test.json`)
+
+The original Wintap DMBD baseline report cited **~95.4% test accuracy** (locally reproduced as **92.51%** aggregate accuracy) on the official test set ($N = 24,747$).
+- **The 2017 Cohort Bias**: 17,131 of those test samples (69.2%) were historical 2017 malware, where the model achieved 93.55% recall with 0 benign samples to misclassify.
+- **The 2024 Cohort Reality**: On the held-out 2024 cohort of that official test set ($N = 7,615$), the original Random Forest drops to **90.19% accuracy**.
+
+Here is the exact head-to-head comparison on the official test set:
+
+| Evaluation Scope | Model | $n$ | Accuracy | Malware Recall | Malware Precision | Malware F1 | Benign FPR | ROC AUC |
+|:---|:---|---:|---:|---:|---:|---:|---:|---:|
+| **Official Test Set (Full)** | Original Random Forest Baseline | 24,747 | **92.512%** | 92.574% | 97.805% | 95.118% | 7.716% | 0.9725 |
+| **Official Test Set (2024 Cohort)** | Original Random Forest Baseline | 7,615 | **90.190%** | 85.509% | 83.361% | 84.421% | 7.698% | 0.9367 |
+| **Official Test Set (2024 Cohort)** | Zero-Shot LLM Agent (`qwen3.8-flash`) | 7,613 | 71.050% | 23.954% | 58.393% | 33.972% | 7.701% | 0.7026 |
+| **Official Test Set (Matched Cohort)** | Original Random Forest Baseline | 2,910 | **90.962%** | 85.449% | 85.730% | 85.589% | 6.513% | 0.9394 |
+| **Official Test Set (Matched Cohort)** | Retrieval-Assisted LLM Agent (`qwen3.8-flash`) | 2,910 | **84.570%** | **81.838%** | 72.551% | 76.915% | 14.178% | **0.8934** |
+
+*(On the matched 2,910 samples, the Retrieval LLM detected **37 malicious samples that the Random Forest missed**; ensembling both yields **89.50% recall**).*
+
+---
+
 ## 2. Key Scientific Findings
 
 ### 1. In-Context Historical Retrieval Drives a +59.85% Recall Surge

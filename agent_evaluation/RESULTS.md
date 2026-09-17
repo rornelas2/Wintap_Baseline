@@ -96,7 +96,35 @@ Total Matched Samples: 5,613
 - **Deterministic Caching**: All evaluated samples are committed to `cache/llm_cache.db`.
 - **Reproducibility Artifacts**:
   - `matched_baseline_comparison.csv`: Direct matched metric tables.
+  - `official_wintap_test_comparison.csv`: Direct matched metrics on official Wintap test set.
   - `agent_zero_shot_predictions.csv`: 14,619 per-sample predictions for Zero-Shot.
   - `agent_retrieval_assisted_predictions.csv`: Per-sample predictions for Retrieval-Assisted.
   - `rf_clean_2024_predictions.csv`: Exact Random Forest benchmark predictions.
   - `per_sample_audit.csv`: Traceability log containing retrieved historical IDs and prompt hashes.
+
+---
+
+## 4. Comparison on the Official Wintap Test Split (`truth_labels_test.json`)
+
+The original Wintap DMBD repository (`LLNL/Wintap-Analytics` 2025-dmbd) evaluated on the official test set of $N = 24,747$ samples from `truth_labels_test.json`, reporting **~95.4% test accuracy** (locally reproduced as **92.51%** aggregate test accuracy).
+
+### Decomposition of the Official Test Set:
+1. **2017 Malware Cohort ($N = 17,131$)**: **100% malicious**. The model was trained on contemporaneous 2017 malware samples ($N = 13,806$), achieving **93.55% recall** with zero benign samples to misclassify. This 69.2% majority cohort heavily inflates aggregate accuracy.
+2. **2024 Test Cohort ($N = 7,615$)**: 5,248 benign, 2,367 malicious. This cohort represents genuine forward temporal generalization. On this cohort, the original Random Forest baseline drops to **90.19% accuracy**.
+
+### Direct Head-to-Head on the Official 2024 Test Cohort:
+Evaluating the models on the exact samples from the official test split:
+
+| Evaluation Scope | Model | $n$ | Accuracy | Malware Recall | Malware Precision | Malware F1 | Benign FPR | ROC AUC |
+|:---|:---|---:|---:|---:|---:|---:|---:|---:|
+| **Official Test Set (Full)** | Original Random Forest Baseline | 24,747 | **92.512%** | 92.574% | 97.805% | 95.118% | 7.716% | 0.9725 |
+| **Official Test Set (2024 Cohort)** | Original Random Forest Baseline | 7,615 | **90.190%** | 85.509% | 83.361% | 84.421% | 7.698% | 0.9367 |
+| **Official Test Set (2024 Cohort)** | Zero-Shot LLM Agent (`qwen3.8-flash`) | 7,613 | 71.050% | 23.954% | 58.393% | 33.972% | 7.701% | 0.7026 |
+| **Official Test Set (Matched Cohort)** | Original Random Forest Baseline | 2,910 | **90.962%** | 85.449% | 85.730% | 85.589% | 6.513% | 0.9394 |
+| **Official Test Set (Matched Cohort)** | Retrieval-Assisted LLM Agent (`qwen3.8-flash`) | 2,910 | **84.570%** | **81.838%** | 72.551% | 76.915% | 14.178% | **0.8934** |
+
+On the matched 2,910 official test samples:
+- The Retrieval-Assisted LLM Agent achieves **81.84% recall** (closely approaching Random Forest's 85.45%).
+- The Retrieval LLM detected **37 malicious samples that Random Forest completely missed**.
+- Combining both detectors yields an ensemble recall of **89.50%** (818 / 914).
+
