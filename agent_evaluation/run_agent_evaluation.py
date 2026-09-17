@@ -312,12 +312,18 @@ class SummaryDB:
         return None
 
 class HistoricalRetriever:
-    """k-NN retrieval strictly from non-2024 training samples."""
-    def __init__(self, features_df: pd.DataFrame, summary_db: SummaryDB):
-        # Strict enforcement: non-2024 training only
-        is_train_non_2024 = (~features_df['test']) & (features_df['year'] < 2024)
-        self.pool_df = features_df.loc[is_train_non_2024].copy().reset_index(drop=True)
-        assert (self.pool_df['year'] < 2024).all(), "Leakage error: 2024 sample found in candidate retrieval pool!"
+    """k-NN retrieval from reference training samples."""
+    def __init__(self, features_df: pd.DataFrame, summary_db: SummaryDB, split_mode: str = "2024"):
+        if split_mode == "official_test":
+            self.pool_df = features_df.loc[~features_df['test']].copy().reset_index(drop=True)
+            assert (~self.pool_df['test']).all(), "Leakage error: test sample found in candidate retrieval pool!"
+            print(f"Historical retriever initialized with {len(self.pool_df)} official training reference samples.")
+        else:
+            # Strict enforcement: non-2024 training only
+            is_train_non_2024 = (~features_df['test']) & (features_df['year'] < 2024)
+            self.pool_df = features_df.loc[is_train_non_2024].copy().reset_index(drop=True)
+            assert (self.pool_df['year'] < 2024).all(), "Leakage error: 2024 sample found in candidate retrieval pool!"
+            print(f"Historical retriever initialized with {len(self.pool_df)} clean non-2024 reference samples.")
         
         self.summary_db = summary_db
         self.feature_cols = FEATURES
@@ -326,7 +332,6 @@ class HistoricalRetriever:
         X_mat = np.log1p(self.pool_df[self.feature_cols].fillna(0).to_numpy())
         self.nn = NearestNeighbors(n_neighbors=10, metric="cosine")
         self.nn.fit(X_mat)
-        print(f"Historical retriever initialized with {len(self.pool_df)} clean non-2024 reference samples.")
 
     def retrieve(self, target_features: np.ndarray, k: int = 3) -> Tuple[List[str], str]:
         """Retrieve k nearest non-2024 neighbors and format as demonstration block."""
@@ -571,6 +576,8 @@ def run_evaluation(config_name: str, split_mode: str, limit: Optional[int],
         eval_df = features_df.loc[features_df['year'].eq(2024)].reset_index(drop=True)
     elif split_mode == "dev_2023":
         eval_df = features_df.loc[features_df['year'].eq(2023)].reset_index(drop=True)
+    elif split_mode == "official_test":
+        eval_df = features_df.loc[features_df['test']].reset_index(drop=True)
     elif split_mode == "pilot_20":
         # Balanced 10 benign, 10 malicious from 2024 evaluation set
         df_2024 = features_df.loc[features_df['year'].eq(2024)]
@@ -680,7 +687,7 @@ def run_evaluation(config_name: str, split_mode: str, limit: Optional[int],
 def main():
     parser = argparse.ArgumentParser(description="Evaluate LLM Agent Baseline on Wintap DMBD")
     parser.add_argument("--config", type=str, choices=["zero_shot", "retrieval_assisted", "tool_agent", "all"], default="zero_shot")
-    parser.add_argument("--split", type=str, choices=["2024", "dev_2023", "pilot_20"], default="pilot_20")
+    parser.add_argument("--split", type=str, choices=["2024", "dev_2023", "pilot_20", "official_test"], default="pilot_20")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of samples")
     parser.add_argument("--concurrency", type=int, default=None, help="Concurrent workers for LLM API calls")
     parser.add_argument("--base-url", type=str, default=None)
@@ -708,7 +715,7 @@ def main():
         args.model 
         or os.environ.get("WINTAP_LLM_MODEL") 
         or os.environ.get("OPENAI_MODEL") 
-        or "qwen3.8-flash"
+        or "glm-5.3-flash"
     )
     resolved_concurrency = (
         args.concurrency 
@@ -729,8 +736,8 @@ def main():
 
     # Auto-detection: opencode.ai does not currently route gpt-5.6-luna (upstream HTTP 500)
     if "opencode.ai" in resolved_base_url and resolved_model == "gpt-5.6-luna":
-        print("[Auto-Config] 'gpt-5.6-luna' returns upstream HTTP 500 on opencode.ai. Routing to 'qwen3.8-flash'.")
-        resolved_model = "qwen3.8-flash"
+        print("[Auto-Config] 'gpt-5.6-luna' returns upstream HTTP 500 on opencode.ai. Routing to 'glm-5.3-flash'.")
+        resolved_model = "glm-5.3-flash"
 
     if not args.mock and resolved_api_key in ["", "EMPTY"]:
         print("ERROR: No API key provided!")
@@ -745,7 +752,7 @@ def main():
     print(f"Loading features from {FEATURES_CSV}...")
     features_df = pd.read_csv(FEATURES_CSV)
 
-    retriever = HistoricalRetriever(features_df, summary_db)
+    retriever = HistoricalRetriever(features_df, summary_db, split_mode=args.split)
 
     client = LLMClient(
         base_url=resolved_base_url,
