@@ -1,0 +1,104 @@
+{
+  "python": "3.11.5",
+  "numpy": "1.26.4",
+  "pandas": "2.2.1",
+  "sklearn": "1.2.2",
+  "features": [
+    "process_create",
+    "process_term",
+    "reg_create_key",
+    "reg_write",
+    "file_create",
+    "image_load",
+    "reg_delete_key",
+    "net_connect",
+    "reg_delete_value"
+  ],
+  "model": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": null,
+    "criterion": "gini",
+    "max_depth": null,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 1,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "n_estimators": 200,
+    "n_jobs": 4,
+    "oob_score": false,
+    "random_state": 1,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "cv": {
+    "n_splits": 10,
+    "shuffle": true,
+    "random_state": 1
+  },
+  "train_n": 40000,
+  "test_n": 24747,
+  "feature_n": 64747,
+  "baseline_sha256": "b681c550a0f2e09ba56e530010294d1a64dba4af0b931dcd5dee72dcc64f0eec",
+  "inputs": [
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_0.json",
+      "bytes": 969100712,
+      "mtime_ns": 1760483208000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_1.json",
+      "bytes": 1022587736,
+      "mtime_ns": 1760483288000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_2.json",
+      "bytes": 981417816,
+      "mtime_ns": 1760483364000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_3.json",
+      "bytes": 946634251,
+      "mtime_ns": 1760483456000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_4.json",
+      "bytes": 952445928,
+      "mtime_ns": 1760483606000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_5.json",
+      "bytes": 967224493,
+      "mtime_ns": 1760483708000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_6.json",
+      "bytes": 971567372,
+      "mtime_ns": 1760483822000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/trees_7.json",
+      "bytes": 980831235,
+      "mtime_ns": 1760483916000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/truth_labels_train.json",
+      "bytes": 1979873,
+      "mtime_ns": 1760483106000000000
+    },
+    {
+      "path": "/home/rornelas5/data/wintap/dmbd/truth_labels_test.json",
+      "bytes": 1233522,
+      "mtime_ns": 1760483080000000000
+    }
+  ],
+  "notes": [
+    "Year is approximate first-seen year, not a model feature.",
+    "CV uses mixed-year training folds; it is not a forward temporal evaluation.",
+    "Single-class years have undefined ROC AUC and balanced accuracy.",
+    "Test uses classifier.predict; CV uses malware probability >= 0.5, matching baseline.py."
+  ]
+}

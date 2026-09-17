@@ -1,0 +1,3 @@
+n,benign,malicious,tn,fp,fn,tp,accuracy,malware_recall,malware_precision,malware_f1,benign_fpr,balanced_accuracy,roc_auc,partial_auc_max_fpr_0_1,configuration,split,model,coverage,failures,valid_predictions,avg_latency_sec,avg_prompt_tokens,avg_completion_tokens,avg_tool_calls
+14619,12252,2367,11372,880,311,2056,0.9185306792530268,0.868610054921842,0.7002724795640327,0.7754101452008297,0.0718250081619327,0.8983925233799546,0.9502404511593668,0.8806537178011091,random_forest_200,2024,"RandomForest(n=200,seed=1)",1.0,0,14619,,,,
+14619,4699,914,4222,477,166,748,0.885445,0.818381,0.610612,0.699392,0.101511,0.858435,0.913714,0.786689,retrieval_assisted,2024,qwen3.8-flash,0.384,9006,5613,5.194,501.6,273.9,0.0

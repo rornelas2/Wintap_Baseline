@@ -1,0 +1,16 @@
+Below are reference execution trace patterns from historical software samples along with their verified behavioral classifications:
+
+{reference_examples}
+
+Now, evaluate the following target unknown software sample trace and produce your verdict:
+
+{target_trace}
+
+Remember: Output valid JSON only, conforming strictly to the requested schema.
+{
+  "prediction": "benign" | "malicious",
+  "malware_probability": <number from 0 to 1>,
+  "confidence": <number from 0 to 1>,
+  "evidence": ["<grounded behavioral observation>", ...],
+  "uncertainty_reason": <string or null>
+}

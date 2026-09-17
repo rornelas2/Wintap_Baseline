@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large databases and heavy preprocessed artifacts
+*.db
+*.db-journal
+agent_evaluation/trace_summaries.db
+agent_evaluation/trace_summaries/
+agent_evaluation/cache/
+
+# Environment variables, agent instructions, and secrets
+.env
+GEMINI.md
+*.key
+*.token
+
+# Logs, Slurm outputs, and error dumps
+*.log
+*.err
+*.out
+slurm-*.log
+agent_evaluation/*.log
+agent_evaluation/*.err
+agent_evaluation/*.out
+year_evaluation/*.log
+year_evaluation/*.err
+year_evaluation/*.out
+
+# IDE and OS artifacts
+.DS_Store
+.vscode/
+.idea/
+.ipynb_checkpoints/

@@ -1,0 +1,12 @@
+Please analyze the following dynamic execution trace of an unknown software sample and output your behavioral verdict.
+
+{trace_text}
+
+Remember: Output valid JSON only, conforming strictly to the requested schema.
+{
+  "prediction": "benign" | "malicious",
+  "malware_probability": <number from 0 to 1>,
+  "confidence": <number from 0 to 1>,
+  "evidence": ["<grounded behavioral observation>", ...],
+  "uncertainty_reason": <string or null>
+}

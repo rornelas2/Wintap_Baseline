@@ -1,0 +1,2 @@
+train_n,removed_train_2024_benign,evaluation_n,evaluation_benign,evaluation_malicious,tn,fp,fn,tp,accuracy,malware_recall,malware_precision,benign_fpr,roc_auc,partial_auc_max_fpr_0_1
+32996,7004,14619,12252,2367,11372,880,311,2056,0.9185306792530269,0.868610054921842,0.7002724795640327,0.07182500816193274,0.9502404511593667,0.8806537178011091
